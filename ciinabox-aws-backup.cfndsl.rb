@@ -2,10 +2,11 @@ CloudFormation do
 
   tags = external_parameters.fetch(:tags, {})
   
-  backup_tags = []
-  backup_tags.push({ Key: 'Name', Value: FnSub("${EnvironmentName}-#{external_parameters[:component_name]}") })
-  backup_tags.push({ Key: 'EnvironmentName', Value: Ref(:EnvironmentName) })
-  backup_tags.push(*tags.map {|k,v| {Key: k, Value: FnSub(v)}}).uniq { |h| h[:Key] }
+  backup_tags = {}
+  backup_tags['Name'] = FnSub("${EnvironmentName}-#{external_parameters[:component_name]}")
+  backup_tags['EnvironmentName'] = Ref(:EnvironmentName)
+
+  tags.each {|k,v| backup_tags[k] = FnSub(v)}
 
   Backup_BackupVault(:BackupVault) do
     BackupVaultName "CiinaboxAWSBackup-BackupVault"
