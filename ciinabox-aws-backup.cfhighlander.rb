@@ -10,5 +10,4 @@ CfhighlanderTemplate do
     ComponentParam 'CiinaboxTagValue'
   end
 
-
 end
